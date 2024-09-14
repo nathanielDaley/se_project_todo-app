@@ -6,6 +6,12 @@ class Todo {
     this._templateElement = document.querySelector(selector);
   }
 
+  _generateName() {
+    this._todoNameEl = this._todoElement.querySelector(".todo__name");
+
+    this._todoNameEl.textContent = this._data.name;
+  }
+
   _generateCheckboxEl() {
     this._todoCheckboxEl = this._todoElement.querySelector(".todo__completed");
     const todoLabel = this._todoElement.querySelector(".todo__label");
@@ -16,6 +22,25 @@ class Todo {
     // The id will initially be undefined for new todos.
     this._todoCheckboxEl.id = `todo-${this._data.id}`;
     todoLabel.setAttribute("for", `todo-${this._data.id}`);
+  }
+
+  _generateDate() {
+    this._todoDate = this._todoElement.querySelector(".todo__date");
+
+    // If a due date has been set, parsing this it with `new Date` will return a
+    // number. If so, we display a string version of the due date in the todo.
+    const dueDate = new Date(this._data.date);
+    if (!isNaN(dueDate)) {
+      this._todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })}`;
+    }
+  }
+
+  _generateDeleteBtn() {
+    this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
   }
 
   _setEventListeners() {
@@ -32,25 +57,12 @@ class Todo {
     this._todoElement = this._templateElement.content
       .querySelector(".todo")
       .cloneNode(true);
-    const todoNameEl = this._todoElement.querySelector(".todo__name");
-    const todoDate = this._todoElement.querySelector(".todo__date");
-    this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
 
-    todoNameEl.textContent = this._data.name;
-
-    this._generateCheckboxEl();
-    this._setEventListeners();
-
-    // If a due date has been set, parsing this it with `new Date` will return a
-    // number. If so, we display a string version of the due date in the todo.
-    const dueDate = new Date(this._data.date);
-    if (!isNaN(dueDate)) {
-      todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })}`;
-    }
+    this._generateName(); //this._todoNameEl
+    this._generateCheckboxEl(); //this._todoCheckboxEl
+    this._generateDate(); //this._todoDate
+    this._generateDeleteBtn(); //this._todoDeleteBtn
+    this._setEventListeners(); //adds event listeners to this._todoCheckboxEl and this._todoDeleteBtn
 
     return this._todoElement;
   }
