@@ -18,8 +18,7 @@ class Todo {
 
     this._todoCheckboxEl.checked = this._data.completed;
 
-    // Apply id and for attributes.
-    // The id will initially be undefined for new todos.
+    // Link checkbox with label for form submital
     this._todoCheckboxEl.id = `todo-${this._data.id}`;
     todoLabel.setAttribute("for", `todo-${this._data.id}`);
   }
@@ -27,7 +26,7 @@ class Todo {
   _generateDate() {
     this._todoDate = this._todoElement.querySelector(".todo__date");
 
-    // If a due date has been set, parsing this it with `new Date` will return a
+    // If a due date has been set, parsing it with `new Date` will return a
     // number. If so, we display a string version of the due date in the todo.
     const dueDate = new Date(this._data.date);
     if (!isNaN(dueDate)) {
