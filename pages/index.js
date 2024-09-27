@@ -19,7 +19,21 @@ const todosList = new Section({
 
 const addTodoPopup = new PopupWithForm({
   popupSelector: "#add-todo-popup",
-  handleFormSubmit: () => {},
+  handleFormSubmit: (values) => {
+    values["id"] = uuidv4();
+
+    // Create a date object and adjust for timezone
+    values.date = new Date(values.date);
+    values.date.setMinutes(
+      values.date.getMinutes() + values.date.getTimezoneOffset()
+    );
+
+    renderTodo(values);
+
+    newTodoValidator.resetValidation();
+
+    addTodoPopup.close();
+  },
 });
 
 const newTodoValidator = new FormValidator(validationConfig, addTodoForm);
@@ -38,24 +52,6 @@ const renderTodo = (item) => {
 
 addTodoButton.addEventListener("click", () => {
   addTodoPopup.open();
-});
-
-addTodoForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  const id = uuidv4();
-  const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
-
-  // Create a date object and adjust for timezone
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  const values = { id, name, date };
-  renderTodo(values);
-
-  newTodoValidator.resetValidation();
-
-  addTodoPopup.close();
 });
 
 todosList.renderItems();

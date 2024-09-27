@@ -15,17 +15,17 @@ export default class Popup {
 
     this._popupElement.focus();
 
-    document.addEventListener("keydown", this._handleEscapeClose);
+    document.addEventListener("keyup", this._handleEscapeClose);
   }
 
   close() {
     this._popupElement.classList.remove("popup_visible");
 
-    document.removeEventListener("keydown", this._handleEscapeClose);
+    document.removeEventListener("keyup", this._handleEscapeClose);
   }
 
   setEventListeners() {
-    this._popupElement.addEventListener("mousedown", (evt) => {
+    this._popupElement.addEventListener("mouseup", (evt) => {
       if (
         evt.target.classList.contains("popup__close") ||
         evt.target.classList.contains("popup")
