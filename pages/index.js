@@ -4,10 +4,13 @@ import { initialTodos, validationConfig } from "../utils/constants.js";
 import Todo from "../components/Todo.js";
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import TodoCounter from "../components/TodoCounter.js";
 import FormValidator from "../components/FormValidator.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoForm = document.forms["add-todo-form"];
+
+const todoCounter = new TodoCounter(initialTodos, ".counter__text");
 
 const todosList = new Section({
   items: initialTodos,
@@ -30,6 +33,8 @@ const addTodoPopup = new PopupWithForm({
 
     renderTodo(values);
 
+    todoCounter.updateTotal(true);
+
     newTodoValidator.resetValidation();
 
     addTodoPopup.close();
@@ -39,7 +44,19 @@ const addTodoPopup = new PopupWithForm({
 const newTodoValidator = new FormValidator(validationConfig, addTodoForm);
 
 const generateTodo = (data) => {
-  const todo = new Todo(data, "#todo-template");
+  const todo = new Todo(
+    data,
+    "#todo-template",
+    (completed) => {
+      todoCounter.updateCompleted(completed);
+    },
+    (completed) => {
+      if (completed) {
+        todoCounter.updateCompleted(false);
+      }
+      todoCounter.updateTotal(false);
+    }
+  );
   const todoElement = todo.getView();
 
   return todoElement;
