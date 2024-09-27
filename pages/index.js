@@ -8,7 +8,6 @@ import TodoCounter from "../components/TodoCounter.js";
 import FormValidator from "../components/FormValidator.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
-const addTodoForm = document.forms["add-todo-form"];
 
 const todoCounter = new TodoCounter(initialTodos, ".counter__text");
 
@@ -41,7 +40,10 @@ const addTodoPopup = new PopupWithForm({
   },
 });
 
-const newTodoValidator = new FormValidator(validationConfig, addTodoForm);
+const newTodoValidator = new FormValidator(
+  validationConfig,
+  addTodoPopup.getForm()
+);
 
 const generateTodo = (data) => {
   const todo = new Todo(
